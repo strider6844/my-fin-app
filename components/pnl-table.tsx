@@ -2,12 +2,10 @@
 // them ordered flagged-first. Optional row-click slot for the report editor.
 
 import { Badge } from "@/components/ui";
-import { formatCurrency, formatPct } from "@/lib/format";
+import { formatCurrency, formatPct, lineLabel } from "@/lib/format";
 import type { VarianceLine } from "@/lib/types";
 
-export function lineLabel(v: Pick<VarianceLine, "management_line" | "segment">): string {
-  return v.segment ? `${v.management_line} – ${v.segment}` : v.management_line;
-}
+export { lineLabel };
 
 export function PnlTable({
   lines,

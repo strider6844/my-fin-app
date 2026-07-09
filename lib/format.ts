@@ -37,6 +37,14 @@ export function slugToPeriod(slug: string): string {
   return `${y}-${m.padStart(2, "0")}-01`;
 }
 
+// Display label for a management line, e.g. "Revenue – Product".
+export function lineLabel(v: {
+  management_line: string;
+  segment: string | null;
+}): string {
+  return v.segment ? `${v.management_line} – ${v.segment}` : v.management_line;
+}
+
 export function formatDateTime(iso: string | null | undefined): string {
   if (!iso) return "—";
   const d = new Date(iso);
