@@ -7,6 +7,7 @@ const links = [
   { href: "/", label: "Overview" },
   { href: "/ingest", label: "Ingest" },
   { href: "/report", label: "Reports" },
+  { href: "/archive", label: "Board Pack" },
   { href: "/account-map", label: "Account Map" },
   { href: "/ingest-log", label: "Audit / Log" },
 ];

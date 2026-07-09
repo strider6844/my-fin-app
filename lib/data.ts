@@ -110,6 +110,29 @@ export async function getReports(companyId: string): Promise<Report[]> {
   return data ?? [];
 }
 
+// Published reports across all companies, newest first — the board-pack archive.
+export async function getPublishedReports(): Promise<Report[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("reports")
+    .select("*")
+    .eq("status", "published")
+    .order("published_at", { ascending: false });
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function getReportById(id: string): Promise<Report | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("reports")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
 export async function getIngestLogs(companyId: string): Promise<IngestLog[]> {
   const supabase = await createClient();
   const { data, error } = await supabase

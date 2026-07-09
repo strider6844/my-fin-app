@@ -84,21 +84,38 @@ export function ReportView({
         </div>
         <div className="flex items-center gap-2">
           {report.status === "draft" && (
-            <Button
-              variant="secondary"
-              disabled={publishing !== null}
-              onClick={() => reportAction("submit")}
-            >
-              {publishing === "submit" ? "Submitting…" : "Submit for approval"}
-            </Button>
+            <>
+              <Button
+                variant="secondary"
+                disabled={publishing !== null}
+                onClick={() => reportAction("submit")}
+              >
+                {publishing === "submit" ? "Submitting…" : "Submit for approval"}
+              </Button>
+              <Button
+                disabled={publishing !== null}
+                onClick={() => reportAction("publish")}
+              >
+                {publishing === "publish" ? "Publishing…" : "Publish Report"}
+              </Button>
+            </>
           )}
-          {(report.status === "draft" || report.status === "submitted") && (
-            <Button
-              disabled={publishing !== null}
-              onClick={() => reportAction("publish")}
-            >
-              {publishing === "publish" ? "Publishing…" : "Publish Report"}
-            </Button>
+          {report.status === "submitted" && (
+            <>
+              <Button
+                variant="danger"
+                disabled={publishing !== null}
+                onClick={() => reportAction("reject")}
+              >
+                {publishing === "reject" ? "Rejecting…" : "Reject to draft"}
+              </Button>
+              <Button
+                disabled={publishing !== null}
+                onClick={() => reportAction("approve")}
+              >
+                {publishing === "approve" ? "Approving…" : "Approve & Publish"}
+              </Button>
+            </>
           )}
           {report.status === "published" && (
             <Button
@@ -113,6 +130,14 @@ export function ReportView({
       </div>
 
       {error && <ErrorBanner message={error} />}
+
+      {report.status === "submitted" && (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          <span className="font-semibold">Pending CFO approval.</span> Finance has
+          submitted this report. A CFO can approve &amp; publish it, or reject it
+          back to draft.
+        </div>
+      )}
 
       {readOnly && (
         <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
