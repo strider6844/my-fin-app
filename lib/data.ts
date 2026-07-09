@@ -6,6 +6,7 @@ import type {
   AccountMapRow,
   AuditLog,
   Commentary,
+  CommentaryEdit,
   Company,
   IngestLog,
   Report,
@@ -129,6 +130,25 @@ export async function getAuditLogs(limit = 50): Promise<AuditLog[]> {
     .limit(limit);
   if (error) throw error;
   return data ?? [];
+}
+
+// Edit history for a set of commentaries, grouped by commentary_id (newest first).
+export async function getCommentaryEdits(
+  commentaryIds: string[],
+): Promise<Record<string, CommentaryEdit[]>> {
+  if (commentaryIds.length === 0) return {};
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("commentary_edits")
+    .select("*")
+    .in("commentary_id", commentaryIds)
+    .order("edited_at", { ascending: false });
+  if (error) throw error;
+  const grouped: Record<string, CommentaryEdit[]> = {};
+  for (const e of (data ?? []) as CommentaryEdit[]) {
+    (grouped[e.commentary_id] ??= []).push(e);
+  }
+  return grouped;
 }
 
 // Distinct periods that have variance data, for building the report list.
