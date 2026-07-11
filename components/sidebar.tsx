@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 
 type Item = { href: string; label: string; icon: string };
 
@@ -96,7 +97,50 @@ function NavList({ pathname }: { pathname: string }) {
   );
 }
 
-export function Sidebar() {
+function AuthFooter({ email }: { email: string | null }) {
+  const router = useRouter();
+  const [busy, setBusy] = useState(false);
+
+  async function signOut() {
+    setBusy(true);
+    await createClient().auth.signOut();
+    router.push("/login");
+    router.refresh();
+  }
+
+  if (!email) {
+    return (
+      <Link
+        href="/login"
+        className="flex items-center gap-2 rounded-lg px-2.5 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+      >
+        <span className="text-base leading-none">🔑</span>
+        Sign in
+      </Link>
+    );
+  }
+  return (
+    <div className="space-y-1.5">
+      <div className="flex items-center gap-2 px-2.5">
+        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-indigo-100 text-xs font-semibold text-indigo-700">
+          {email[0]?.toUpperCase()}
+        </span>
+        <span className="truncate text-xs text-slate-600" title={email}>
+          {email}
+        </span>
+      </div>
+      <button
+        onClick={signOut}
+        disabled={busy}
+        className="w-full rounded-lg px-2.5 py-1.5 text-left text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 disabled:opacity-50"
+      >
+        {busy ? "Signing out…" : "Sign out"}
+      </button>
+    </div>
+  );
+}
+
+export function Sidebar({ userEmail = null }: { userEmail?: string | null }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -113,8 +157,8 @@ export function Sidebar() {
         <div className="flex-1 overflow-y-auto">
           <NavList pathname={pathname} />
         </div>
-        <div className="border-t border-[var(--border)] px-4 py-3 text-[11px] text-[var(--muted)]">
-          FP&amp;A · actuals vs budget
+        <div className="border-t border-[var(--border)] px-3 py-3">
+          <AuthFooter email={userEmail} />
         </div>
       </aside>
 
@@ -157,6 +201,9 @@ export function Sidebar() {
             </div>
             <div className="flex-1 overflow-y-auto">
               <NavList pathname={pathname} />
+            </div>
+            <div className="border-t border-[var(--border)] px-3 py-3">
+              <AuthFooter email={userEmail} />
             </div>
           </aside>
         </div>
