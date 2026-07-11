@@ -52,7 +52,7 @@ export function LineChart({
             <g key={t}>
               <line x1={padL} y1={y} x2={width - padR} y2={y} stroke="#eef2f7" />
               <text x={padL - 6} y={y + 3} textAnchor="end" fontSize="10" fill="#94a3b8">
-                £{fmt(v)}
+                ${fmt(v)}
               </text>
             </g>
           );

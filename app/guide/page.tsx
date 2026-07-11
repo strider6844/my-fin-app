@@ -47,7 +47,7 @@ export default function GuidePage() {
           <ol className="space-y-4">
             <Step n={1} title="Create the company">
               Go to <GuideLink href="/settings">Settings</GuideLink> → “Add a
-              company”. Enter the name and the materiality threshold (e.g. £10,000
+              company”. Enter the name and the materiality threshold (e.g. $10,000
               — variances at or above this get flagged). Save.
             </Step>
             <Step n={2} title="Map the accounts">

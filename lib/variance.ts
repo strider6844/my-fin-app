@@ -154,5 +154,5 @@ export function stubCommentary(v: ComputedVariance): string {
   const dir = v.variance_amount < 0 ? "below" : "above";
   const abs = Math.abs(v.variance_amount);
   const line = v.segment ? `${v.management_line} – ${v.segment}` : v.management_line;
-  return `${line} came in £${abs.toLocaleString("en-GB")} ${dir} budget. Draft explanation pending finance review.`;
+  return `${line} came in $${abs.toLocaleString("en-US")} ${dir} budget. Draft explanation pending finance review.`;
 }

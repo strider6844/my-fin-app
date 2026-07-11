@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { writeAudit } from "@/lib/audit";
 
 // Amend a company's assumptions: its name and its materiality threshold (the
-// £ level above which a variance is flagged for commentary).
+// $ level above which a variance is flagged for commentary).
 export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ id: string }> },

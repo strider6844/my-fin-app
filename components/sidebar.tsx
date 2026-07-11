@@ -46,7 +46,7 @@ function Brand() {
   return (
     <Link href="/" className="flex items-center gap-2.5 px-2 py-1">
       <span className="grid h-8 w-8 place-items-center rounded-lg bg-[var(--brand)] text-base font-semibold text-white">
-        £
+        $
       </span>
       <span className="leading-tight">
         <span className="block text-sm font-semibold">my-fin-app</span>

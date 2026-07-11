@@ -1,11 +1,11 @@
-// Display formatting helpers. GBP throughout (PRD talks in £).
+// Display formatting helpers. USD throughout.
 
 export function formatCurrency(n: number | null | undefined): string {
   if (n === null || n === undefined || Number.isNaN(n)) return "—";
   const abs = Math.abs(n);
-  const s = abs.toLocaleString("en-GB", {
+  const s = abs.toLocaleString("en-US", {
     style: "currency",
-    currency: "GBP",
+    currency: "USD",
     maximumFractionDigits: 0,
   });
   return n < 0 ? `(${s})` : s;

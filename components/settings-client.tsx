@@ -106,7 +106,7 @@ export function SettingsClient({ companies }: { companies: Company[] }) {
                 </div>
                 <div>
                   <label className="mb-1 block text-xs font-medium text-[var(--muted)]">
-                    Materiality threshold (£)
+                    Materiality threshold ($)
                   </label>
                   <input
                     type="number"
@@ -149,7 +149,7 @@ export function SettingsClient({ companies }: { companies: Company[] }) {
           </div>
           <div>
             <label className="mb-1 block text-xs font-medium text-[var(--muted)]">
-              Materiality threshold (£)
+              Materiality threshold ($)
             </label>
             <input
               type="number"

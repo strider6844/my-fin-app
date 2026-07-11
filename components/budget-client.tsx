@@ -139,7 +139,7 @@ export function BudgetClient({
                   <th className="px-4 py-2 font-medium">Management line</th>
                   <th className="px-4 py-2 font-medium">Type</th>
                   <th className="px-4 py-2 text-right font-medium">
-                    Budget amount (£)
+                    Budget amount ($)
                   </th>
                 </tr>
               </thead>

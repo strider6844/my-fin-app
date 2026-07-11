@@ -70,7 +70,7 @@ export function AuthForm({ redirectTo = "/" }: { redirectTo?: string }) {
     <Card className="mx-auto w-full max-w-sm p-6">
       <div className="mb-5 text-center">
         <div className="mx-auto mb-3 grid h-11 w-11 place-items-center rounded-xl bg-[var(--brand)] text-lg font-semibold text-white">
-          £
+          $
         </div>
         <h1 className="text-lg font-semibold">
           {mode === "signin" ? "Sign in to my-fin-app" : "Create your account"}
