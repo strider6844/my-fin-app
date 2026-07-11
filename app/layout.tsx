@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Nav } from "@/components/nav";
+import { Sidebar } from "@/components/sidebar";
 
 export const metadata: Metadata = {
   title: "my-fin-app — Management Reporting",
@@ -16,8 +16,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <Nav />
-        <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
+        <div className="flex min-h-screen flex-col md:flex-row">
+          <Sidebar />
+          <div className="min-w-0 flex-1">
+            <main className="mx-auto w-full max-w-6xl px-4 py-8 md:px-8">
+              {children}
+            </main>
+          </div>
+        </div>
       </body>
     </html>
   );

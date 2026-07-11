@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import type {
   AccountMapRow,
   AuditLog,
+  BudgetLine,
   Commentary,
   CommentaryEdit,
   Company,
@@ -12,6 +13,14 @@ import type {
   Report,
   VarianceLine,
 } from "@/lib/types";
+
+// A distinct management line + segment derived from the account map, with the
+// polarity (income vs cost) of the accounts feeding it. Used to build budgets.
+export interface MappingTarget {
+  management_line: string;
+  segment: string | null;
+  polarity: number; // +1 income, -1 cost
+}
 
 export async function getCompanies(): Promise<Company[]> {
   const supabase = await createClient();
@@ -153,6 +162,53 @@ export async function getAuditLogs(limit = 50): Promise<AuditLog[]> {
     .limit(limit);
   if (error) throw error;
   return data ?? [];
+}
+
+export async function getBudgetLines(
+  companyId: string,
+  period: string,
+): Promise<BudgetLine[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("budget_lines")
+    .select("*")
+    .eq("company_id", companyId)
+    .eq("period", period);
+  if (error) throw error;
+  return data ?? [];
+}
+
+// Distinct (management_line, segment) targets from the account map, each with
+// the polarity of its accounts, so the budget editor knows income vs cost.
+export async function getMappingTargets(companyId: string): Promise<MappingTarget[]> {
+  const rows = await getAccountMap(companyId);
+  const map = new Map<string, MappingTarget>();
+  for (const r of rows) {
+    const key = `${r.management_line}||${r.segment ?? ""}`;
+    if (!map.has(key)) {
+      map.set(key, {
+        management_line: r.management_line,
+        segment: r.segment,
+        polarity: Number(r.sign_convention) === -1 ? -1 : 1,
+      });
+    }
+  }
+  return [...map.values()].sort((a, b) =>
+    a.management_line.localeCompare(b.management_line) ||
+    (a.segment ?? "").localeCompare(b.segment ?? ""),
+  );
+}
+
+// Distinct periods that have a budget, for the budget-editor period list.
+export async function getBudgetPeriods(companyId: string): Promise<string[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("budget_lines")
+    .select("period")
+    .eq("company_id", companyId);
+  if (error) throw error;
+  const set = new Set((data ?? []).map((r) => r.period as string));
+  return [...set].sort().reverse();
 }
 
 // Edit history for a set of commentaries, grouped by commentary_id (newest first).

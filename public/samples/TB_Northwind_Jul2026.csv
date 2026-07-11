@@ -1,0 +1,18 @@
+account_code,account_name,amount
+4000,In-Store Sales,464500
+4010,Online Sales,163200
+4020,Click & Collect,35800
+4900,Sales Returns,18000
+5000,Cost of Goods Sold,270100
+5100,Carriage Inwards,8400
+5200,Stock Shrinkage,7500
+6000,Store Salaries,97000
+6010,Head Office Salaries,51200
+6020,Staff Bonuses,7800
+6100,Store Rent,42700
+6110,Utilities,6100
+6200,Marketing & Advertising,32500
+6300,Distribution & Delivery,23700
+6400,Depreciation,18800
+6500,Insurance,5700
+6600,IT & Software,12500
