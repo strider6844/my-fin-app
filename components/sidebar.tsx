@@ -17,6 +17,14 @@ const groups: { title: string | null; items: Item[] }[] = [
     ],
   },
   {
+    title: "Financial model",
+    items: [
+      { href: "/model", label: "Forecast", icon: "📈" },
+      { href: "/model/scenarios", label: "Scenarios", icon: "🔀" },
+      { href: "/model/assumptions", label: "Drivers", icon: "🎚️" },
+    ],
+  },
+  {
     title: "Setup & assumptions",
     items: [
       { href: "/budget", label: "Budget", icon: "💷" },
@@ -50,8 +58,15 @@ function Brand() {
 }
 
 function NavList({ pathname }: { pathname: string }) {
-  const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
+  // Longest-prefix match so /model doesn't also light up on /model/scenarios.
+  const allHrefs = groups.flatMap((g) => g.items.map((i) => i.href));
+  const activeHref =
+    pathname === "/"
+      ? "/"
+      : allHrefs
+          .filter((h) => h !== "/" && (pathname === h || pathname.startsWith(h + "/")))
+          .sort((a, b) => b.length - a.length)[0];
+  const isActive = (href: string) => href === activeHref;
   return (
     <nav className="flex flex-col gap-5 px-3 py-4">
       {groups.map((group, gi) => (

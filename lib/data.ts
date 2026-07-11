@@ -158,10 +158,37 @@ export async function getAuditLogs(limit = 50): Promise<AuditLog[]> {
   const { data, error } = await supabase
     .from("audit_logs")
     .select("*")
+    // model_config rows are a jsonb config store, not finance-op audit events
+    .neq("object_type", "model_config")
     .order("created_at", { ascending: false })
     .limit(limit);
   if (error) throw error;
   return data ?? [];
+}
+
+// Actual management-line P&L as monthly series per (line, segment), for the
+// forecast engine. Built from variance_lines (signed actual_amount per period).
+export async function getActualSeries(
+  companyId: string,
+): Promise<{ management_line: string; segment: string | null; byPeriod: Record<string, number> }[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("variance_lines")
+    .select("management_line, segment, period, actual_amount")
+    .eq("company_id", companyId);
+  if (error) throw error;
+  const map = new Map<string, { management_line: string; segment: string | null; byPeriod: Record<string, number> }>();
+  for (const r of data ?? []) {
+    const key = `${r.management_line}||${r.segment ?? ""}`;
+    let entry = map.get(key);
+    if (!entry) {
+      entry = { management_line: r.management_line, segment: r.segment, byPeriod: {} };
+      map.set(key, entry);
+    }
+    // If a period was re-ingested there is one row; sum defensively anyway.
+    entry.byPeriod[r.period] = (entry.byPeriod[r.period] ?? 0) + Number(r.actual_amount);
+  }
+  return [...map.values()];
 }
 
 export async function getBudgetLines(
