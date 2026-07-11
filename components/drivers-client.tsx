@@ -75,7 +75,38 @@ export function DriversClient({
       )}
 
       <Card className="overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile: one card per driver, labeled scenario inputs */}
+        <div className="divide-y divide-slate-100 md:hidden">
+          {config.drivers.map((d: Driver) => (
+            <div key={d.key} className="space-y-2 px-4 py-3">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-slate-800">{d.label}</span>
+                  <Badge tone="neutral">{d.category}</Badge>
+                </div>
+                <p className="mt-0.5 text-xs text-[var(--muted)]">{d.rationale}</p>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {SCENARIOS.map((s) => (
+                  <label key={s} className="block">
+                    <span className="mb-0.5 block text-[10px] font-medium uppercase tracking-wide text-[var(--muted)]">
+                      {s}
+                    </span>
+                    <input
+                      inputMode="decimal"
+                      className="w-full rounded-md border border-[var(--border)] px-2 py-1.5 text-right text-sm tabular focus:border-indigo-400 focus:outline-none"
+                      value={values[s][d.key]}
+                      onChange={(e) => set(s, d.key, e.target.value)}
+                    />
+                  </label>
+                ))}
+              </div>
+              <div className="text-[11px] text-[var(--muted)]">{d.unit}</div>
+            </div>
+          ))}
+        </div>
+        {/* Desktop: full grid */}
+        <div className="hidden overflow-x-auto md:block">
           <table className="w-full min-w-[720px] text-sm">
             <thead>
               <tr className="border-b border-[var(--border)] text-left text-xs uppercase tracking-wide text-[var(--muted)]">

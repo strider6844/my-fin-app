@@ -132,7 +132,40 @@ export function BudgetClient({
         </WarningBanner>
       ) : (
         <Card className="overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile: stacked label + input rows */}
+          <div className="divide-y divide-slate-100 sm:hidden">
+            {targets.map((t) => {
+              const k = keyOf(t.management_line, t.segment);
+              return (
+                <div key={k} className="flex items-center gap-3 px-4 py-2.5">
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-sm font-medium text-slate-800">
+                      {lineLabel(t)}
+                    </div>
+                    <div className="text-[11px] text-[var(--muted)]">
+                      {t.polarity === -1 ? "Cost (subtracted)" : "Income"}
+                    </div>
+                  </div>
+                  <input
+                    type="number"
+                    inputMode="decimal"
+                    className="w-28 rounded-md border border-[var(--border)] px-2 py-1.5 text-right text-sm tabular focus:border-indigo-400 focus:outline-none"
+                    placeholder="0"
+                    value={amounts[k] ?? ""}
+                    onChange={(e) => setAmounts({ ...amounts, [k]: e.target.value })}
+                  />
+                </div>
+              );
+            })}
+            <div className="flex items-center justify-between px-4 py-3 text-sm font-semibold">
+              <span>Budgeted net result</span>
+              <span className={`tabular ${signedTotal < 0 ? "text-red-600" : "text-emerald-600"}`}>
+                {formatCurrency(signedTotal)}
+              </span>
+            </div>
+          </div>
+          {/* Desktop: full table */}
+          <div className="hidden overflow-x-auto sm:block">
             <table className="w-full min-w-[560px] text-sm">
               <thead>
                 <tr className="border-b border-[var(--border)] text-left text-xs uppercase tracking-wide text-[var(--muted)]">

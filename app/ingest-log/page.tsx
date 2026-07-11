@@ -68,7 +68,31 @@ export default async function IngestLogPage({
               message="Upload a trial balance on the Ingest page to see it recorded here with its checksum and status."
             />
           ) : (
-            <div className="overflow-x-auto">
+            <>
+            {/* Mobile: card per ingest event */}
+            <ul className="divide-y divide-slate-100 md:hidden">
+              {logs.map((l) => (
+                <li key={l.id} className="space-y-1 px-4 py-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="truncate text-sm font-medium">{l.filename}</span>
+                    <Badge tone={statusTone(l.status)}>{l.status}</Badge>
+                  </div>
+                  <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-[var(--muted)]">
+                    <span>{periodToLabel(l.period)}</span>
+                    <span>{formatDateTime(l.ingested_at)}</span>
+                    <span>{l.row_count ?? "—"} rows</span>
+                  </div>
+                  <div className="truncate font-mono text-[10px] text-slate-400">
+                    {l.checksum}
+                  </div>
+                  {l.status === "failed" && l.error_message && (
+                    <div className="text-xs text-red-600">{l.error_message}</div>
+                  )}
+                </li>
+              ))}
+            </ul>
+            {/* Desktop: full table */}
+            <div className="hidden overflow-x-auto md:block">
               <table className="w-full min-w-[720px] text-sm">
                 <thead>
                   <tr className="border-b border-[var(--border)] text-left text-xs uppercase tracking-wide text-[var(--muted)]">
@@ -109,6 +133,7 @@ export default async function IngestLogPage({
                 </tbody>
               </table>
             </div>
+            </>
           )}
         </Card>
 
@@ -124,7 +149,7 @@ export default async function IngestLogPage({
           ) : (
             <ul className="divide-y divide-slate-100">
               {audit.map((a) => (
-                <li key={a.id} className="flex items-center gap-3 px-4 py-2.5 text-sm">
+                <li key={a.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2.5 text-sm">
                   <Badge tone="slate">{a.action}</Badge>
                   <span className="text-slate-600">{a.object_type}</span>
                   <span className="ml-auto text-xs text-[var(--muted)]">
