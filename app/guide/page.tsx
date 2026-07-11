@@ -108,7 +108,66 @@ export default function GuidePage() {
               Reject to draft). Published reports are frozen into the{" "}
               <GuideLink href="/archive">Board Pack</GuideLink> archive.
             </Step>
+            <Step n={6} title="Glance at the forecast">
+              After the month is in, open{" "}
+              <GuideLink href="/model">Forecast</GuideLink> — the projection re-bases
+              automatically on the new actuals. If the outlook has shifted, adjust
+              the drivers (see below) before the board asks.
+            </Step>
           </ol>
+        </Card>
+
+        <Card className="p-5">
+          <div className="mb-3 flex items-center gap-2">
+            <Badge tone="amber">Financial model</Badge>
+            <span className="text-sm text-[var(--muted)]">
+              The forward-looking side — forecast, scenarios, drivers
+            </span>
+          </div>
+          <p className="mb-4 text-sm text-slate-600">
+            Reporting looks <em>backward</em> (what happened vs budget). The model
+            looks <em>forward</em>: it takes each management line&apos;s recent
+            actuals (trailing 3-month average) and grows them month by month using
+            editable <strong>drivers</strong>, out ~2 years. Nothing is typed into
+            the forecast directly — change a driver and every figure recomputes.
+          </p>
+          <ol className="space-y-4">
+            <Step n={1} title="Open the Forecast">
+              <GuideLink href="/model">Forecast</GuideLink> shows the net-result
+              outlook (solid line = actuals, dashed = forecast), FY totals per year,
+              and the full P&amp;L by line. Use the tabs at the top to switch
+              scenario.
+            </Step>
+            <Step n={2} title="Understand the three scenarios">
+              Every projection exists in three versions, side by side on{" "}
+              <GuideLink href="/model/scenarios">Scenarios</GuideLink>:{" "}
+              <strong>Base</strong> — your central planning view (default: revenue
+              +8%/yr, costs +6%/yr); <strong>Conservative</strong> — slower revenue,
+              faster cost growth (+3%/+8%) to stress-test the downside;{" "}
+              <strong>Upside</strong> — stronger growth with contained costs
+              (+15%/+5%). Same actuals, different assumptions — the spread between
+              them is your planning range.
+            </Step>
+            <Step n={3} title="Tune the drivers">
+              <GuideLink href="/model/assumptions">Drivers</GuideLink> is the
+              assumption register: one row per driver, one value per scenario, in %
+              per annum. Type the number you believe (e.g. Base revenue growth 10),
+              click <strong>Save drivers</strong> — the Forecast and Scenarios pages
+              recompute instantly. Each save is recorded with who changed it and
+              when.
+            </Step>
+            <Step n={4} title="Read the range, then commit to a plan">
+              Use Conservative to check you survive the downside (cash, cost cover),
+              Base for the plan you publish, and Upside to size the opportunity.
+              When the board asks &quot;what if revenue slows?&quot; — the answer is
+              already on the Scenarios page.
+            </Step>
+          </ol>
+          <p className="mt-4 text-xs text-[var(--muted)]">
+            The forecast needs at least one ingested month of actuals per company.
+            Northwind Retail has Jan–Jun 2026 loaded, so its model runs out of the
+            box.
+          </p>
         </Card>
 
         <Card className="p-5">
@@ -142,6 +201,11 @@ export default function GuidePage() {
                   <td className="px-3 py-2.5 font-medium">Commentary (the “why”)</td>
                   <td className="px-3 py-2.5"><GuideLink href="/report">Reports</GuideLink> → open a report</td>
                   <td className="px-3 py-2.5 text-[var(--muted)]">The explanation on each flagged line; versioned on every edit.</td>
+                </tr>
+                <tr>
+                  <td className="px-3 py-2.5 font-medium">Forecast drivers (per scenario)</td>
+                  <td className="px-3 py-2.5"><GuideLink href="/model/assumptions">Drivers</GuideLink></td>
+                  <td className="px-3 py-2.5 text-[var(--muted)]">Revenue &amp; cost growth for Base / Conservative / Upside; saving recomputes the whole forecast.</td>
                 </tr>
               </tbody>
             </table>
